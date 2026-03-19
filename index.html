@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,319 +9,324 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --rose:    #e8405a;
-      --blush:   #fde8ed;
-      --cream:   #fff8f0;
-      --gold:    #c9972c;
-      --dark:    #1a0a10;
-      --petal:   #f5b8c4;
-    }
+```
+:root {
+  --rose:    #e8405a;
+  --blush:   #fde8ed;
+  --cream:   #fff8f0;
+  --gold:    #c9972c;
+  --dark:    #1a0a10;
+  --petal:   #f5b8c4;
+}
 
-    html, body {
-      height: 100%;
-      font-family: 'Lato', sans-serif;
-      background: var(--cream);
-      color: var(--dark);
-      overflow-x: hidden;
-    }
+html, body {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+  background: #fff8f0;
+  color: #1a0a10;
+  overflow-x: hidden;
+}
 
-    /* ── Floating hearts background ── */
-    .hearts-bg {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      overflow: hidden;
-    }
-    .heart-particle {
-      position: absolute;
-      bottom: -60px;
-      font-size: 1.4rem;
-      animation: floatUp linear infinite;
-      opacity: 0;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.4; }
-      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-    }
+/* ── Floating hearts background ── */
+.hearts-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.heart-particle {
+  position: absolute;
+  bottom: -60px;
+  font-size: 1.4rem;
+  animation: floatUp linear infinite;
+  opacity: 0;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+}
 
-    /* ── Pages ── */
-    .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .page.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .page.hidden { display: none; }
+/* ── Pages ── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.page.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.page.hidden { display: none; }
 
-    /* ── Envelope / cover page ── */
-    #page-cover {
-      background: radial-gradient(ellipse at 60% 40%, #fde8ed 0%, #fff8f0 70%);
-    }
-    .envelope-wrap {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-    }
-    .envelope {
-      width: 160px; height: 110px;
-      position: relative;
-      filter: drop-shadow(0 8px 24px rgba(232,64,90,0.25));
-      transition: transform 0.3s ease;
-    }
-    .envelope:hover { transform: scale(1.06) rotate(-2deg); }
-    .envelope svg { width: 100%; height: 100%; }
+/* ── Envelope / cover page ── */
+#page-cover {
+  background: radial-gradient(ellipse at 60% 40%, #fde8ed 0%, #fff8f0 70%);
+}
+.envelope-wrap {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+.envelope {
+  width: 160px; height: 110px;
+  position: relative;
+  filter: drop-shadow(0 8px 24px rgba(232,64,90,0.25));
+  transition: transform 0.3s ease;
+}
+.envelope:hover { transform: scale(1.06) rotate(-2deg); }
+.envelope svg { width: 100%; height: 100%; }
 
-    .cover-text {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
-      color: var(--rose);
-      font-style: italic;
-    }
-    .cover-hint {
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      text-transform: uppercase;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+.cover-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  color: #e8405a;
+  font-style: italic;
+}
+.cover-hint {
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: #c9972c;
+  text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
 
-    /* ── Letter page ── */
-    #page-letter {
-      background: linear-gradient(160deg, #fff8f0 0%, #fde8ed 100%);
-    }
-    .letter-card {
-      background: #fff;
-      border-radius: 2px;
-      max-width: 560px;
-      width: 100%;
-      padding: 3rem 3.5rem;
-      box-shadow: 0 4px 40px rgba(232,64,90,0.12), 0 1px 4px rgba(0,0,0,0.06);
-      position: relative;
-      animation: cardIn 0.7s ease both;
-    }
-    @keyframes cardIn {
-      from { transform: translateY(40px) rotate(-1deg); opacity: 0; }
-      to   { transform: none; opacity: 1; }
-    }
-    .letter-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose));
-      background-size: 200% 100%;
-      animation: shimmer 3s linear infinite;
-    }
-    @keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+/* ── Letter page ── */
+#page-letter {
+  background: linear-gradient(160deg, #fff8f0 0%, #fde8ed 100%);
+}
+.letter-card {
+  background: #fff;
+  border-radius: 2px;
+  max-width: 560px;
+  width: 100%;
+  padding: 3rem 3.5rem;
+  box-shadow: 0 4px 40px rgba(232,64,90,0.12), 0 1px 4px rgba(0,0,0,0.06);
+  position: relative;
+  animation: cardIn 0.7s ease both;
+}
+@keyframes cardIn {
+  from { transform: translateY(40px) rotate(-1deg); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.letter-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #e8405a, #c9972c, #e8405a);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
 
-    .letter-date {
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 1.6rem;
-    }
-    .letter-heading {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      color: var(--rose);
-      margin-bottom: 1.4rem;
-      line-height: 1.2;
-    }
-    .letter-body {
-      font-size: 1.05rem;
-      line-height: 1.9;
-      color: #4a2030;
-      font-weight: 300;
-    }
-    .letter-body strong {
-      font-weight: 400;
-      color: var(--rose);
-    }
-    .letter-sig {
-      margin-top: 2rem;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.2rem;
-      color: var(--gold);
-    }
-    .next-btn {
-      margin-top: 2.4rem;
-      background: var(--rose);
-      color: #fff;
-      border: none;
-      padding: 0.85rem 2.4rem;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 18px rgba(232,64,90,0.35);
-    }
-    .next-btn:hover {
-      background: #c42d46;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(232,64,90,0.4);
-    }
+.letter-date {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: #c9972c;
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+}
+.letter-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: #e8405a;
+  margin-bottom: 1.4rem;
+  line-height: 1.2;
+}
+.letter-body {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #4a2030;
+  font-weight: 300;
+}
+.letter-body strong {
+  font-weight: 400;
+  color: #e8405a;
+}
+.letter-sig {
+  margin-top: 2rem;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #c9972c;
+}
+.next-btn {
+  margin-top: 2.4rem;
+  background: #e8405a;
+  color: #fff;
+  border: none;
+  padding: 0.85rem 2.4rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(232,64,90,0.35);
+}
+.next-btn:hover {
+  background: #c42d46;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(232,64,90,0.4);
+}
 
-    /* ── Reasons page ── */
-    #page-reasons {
-      background: linear-gradient(135deg, #fff0f5 0%, #fff8e8 100%);
-    }
-    .reasons-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.2rem, 3.5vw, 1.8rem);
-      color: var(--rose);
-      margin-bottom: 1rem;
-    }
-    .reasons-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
-      max-width: 680px;
-      width: 100%;
-      margin-bottom: 1.5rem;
-    }
-    @media (max-width: 500px) {
-      .reasons-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.6rem;
-      }
-    }
-    .reason-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 0.9rem 0.8rem;
-      box-shadow: 0 2px 16px rgba(232,64,90,0.1);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      opacity: 0;
-      transform: scale(0.85);
-    }
-    .reason-card.pop {
-      animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
-    }
-    @keyframes popIn {
-      to { opacity: 1; transform: scale(1); }
-    }
-    .reason-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 28px rgba(232,64,90,0.18);
-    }
-    .reason-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-    .reason-text { font-size: 0.9rem; color: #4a2030; line-height: 1.5; }
+/* ── Reasons page ── */
+#page-reasons {
+  background: linear-gradient(135deg, #fff0f5 0%, #fff8e8 100%);
+}
+.reasons-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+  color: #e8405a;
+  margin-bottom: 1rem;
+}
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  max-width: 680px;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 500px) {
+  .reasons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+}
+.reason-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.9rem 0.8rem;
+  box-shadow: 0 2px 16px rgba(232,64,90,0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  opacity: 0;
+  transform: scale(0.85);
+}
+.reason-card.pop {
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes popIn {
+  to { opacity: 1; transform: scale(1); }
+}
+.reason-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(232,64,90,0.18);
+}
+.reason-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.reason-text { font-size: 0.9rem; color: #4a2030; line-height: 1.5; }
 
-    /* ── Question page ── */
-    #page-question {
-      background: radial-gradient(ellipse at 50% 60%, #fde8ed 0%, #fff8f0 65%);
-    }
-    .big-heart {
-      font-size: 5rem;
-      animation: heartbeat 1.2s ease-in-out infinite;
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
-    @keyframes heartbeat {
-      0%,100%{ transform: scale(1); }
-      14%    { transform: scale(1.18); }
-      28%    { transform: scale(1); }
-      42%    { transform: scale(1.12); }
-      70%    { transform: scale(1); }
-    }
-    .question-text {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 6vw, 3.4rem);
-      color: var(--rose);
-      margin-bottom: 0.5rem;
-      line-height: 1.15;
-    }
-    .question-sub {
-      font-size: 1rem;
-      color: var(--gold);
-      margin-bottom: 2.4rem;
-      font-style: italic;
-    }
-    .btn-row {
-      display: flex;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .btn-yes {
-      background: var(--rose);
-      color: #fff;
-      border: none;
-      padding: 1rem 3rem;
-      border-radius: 50px;
-      font-size: 1.15rem;
-      font-family: 'Playfair Display', serif;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(232,64,90,0.4);
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-yes:hover {
-      background: #c42d46;
-      transform: scale(1.07);
-      box-shadow: 0 8px 32px rgba(232,64,90,0.5);
-    }
-    .btn-no {
-      background: transparent;
-      color: #c0909a;
-      border: 2px solid #e8b8c4;
-      padding: 1rem 2.4rem;
-      border-radius: 50px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      position: relative;
-    }
+/* ── Question page ── */
+#page-question {
+  background: radial-gradient(ellipse at 50% 60%, #fde8ed 0%, #fff8f0 65%);
+}
+.big-heart {
+  font-size: 5rem;
+  animation: heartbeat 1.2s ease-in-out infinite;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+@keyframes heartbeat {
+  0%,100%{ transform: scale(1); }
+  14%    { transform: scale(1.18); }
+  28%    { transform: scale(1); }
+  42%    { transform: scale(1.12); }
+  70%    { transform: scale(1); }
+}
+.question-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  color: #e8405a;
+  margin-bottom: 0.5rem;
+  line-height: 1.15;
+}
+.question-sub {
+  font-size: 1rem;
+  color: #c9972c;
+  margin-bottom: 2.4rem;
+  font-style: italic;
+}
+.btn-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-yes {
+  background: #e8405a;
+  color: #fff;
+  border: none;
+  padding: 1rem 3rem;
+  border-radius: 50px;
+  font-size: 1.15rem;
+  font-family: 'Playfair Display', serif;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(232,64,90,0.4);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-yes:hover {
+  background: #c42d46;
+  transform: scale(1.07);
+  box-shadow: 0 8px 32px rgba(232,64,90,0.5);
+}
+.btn-no {
+  background: transparent;
+  color: #c0909a;
+  border: 2px solid #e8b8c4;
+  padding: 1rem 2.4rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
 
-    /* ── Yes page ── */
-    #page-yes {
-      background: radial-gradient(ellipse at 50% 40%, #fde8ed 0%, #fff8f0 70%);
-    }
-    .confetti-wrap { font-size: 3rem; margin-bottom: 0.8rem; animation: spin 1s ease both; }
-    @keyframes spin { from{transform:rotate(-20deg) scale(0.5);opacity:0} to{transform:none;opacity:1} }
-    .yes-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      color: var(--rose);
-      margin-bottom: 0.6rem;
-      line-height: 1.1;
-    }
-    .yes-sub {
-      font-size: 1.1rem;
-      color: #4a2030;
-      font-weight: 300;
-      max-width: 420px;
-      line-height: 1.8;
-      margin-bottom: 1.2rem;
-    }
-    .sparkle-row { font-size: 2rem; letter-spacing: 0.4rem; animation: floatY 2s ease-in-out infinite; }
-    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+/* ── Yes page ── */
+#page-yes {
+  background: radial-gradient(ellipse at 50% 40%, #fde8ed 0%, #fff8f0 70%);
+}
+.confetti-wrap { font-size: 3rem; margin-bottom: 0.8rem; animation: spin 1s ease both; }
+@keyframes spin { from{transform:rotate(-20deg) scale(0.5);opacity:0} to{transform:none;opacity:1} }
+.yes-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  color: #e8405a;
+  margin-bottom: 0.6rem;
+  line-height: 1.1;
+}
+.yes-sub {
+  font-size: 1.1rem;
+  color: #4a2030;
+  font-weight: 300;
+  max-width: 420px;
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.sparkle-row { font-size: 2rem; letter-spacing: 0.4rem; animation: floatY 2s ease-in-out infinite; }
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+```
+
   </style>
 </head>
 <body>
 
 <!-- Floating hearts -->
+
 <div class="hearts-bg" id="heartsBg"></div>
 
 <!-- PAGE 1: Envelope -->
+
 <div class="page active" id="page-cover">
   <div class="envelope-wrap" onclick="goTo('page-letter')">
     <div class="envelope">
@@ -339,6 +345,7 @@
 </div>
 
 <!-- PAGE 2: Letter -->
+
 <div class="page hidden" id="page-letter">
   <div class="letter-card">
     <p class="letter-date">A letter, just for you</p>
@@ -364,6 +371,7 @@
 </div>
 
 <!-- PAGE 3: Reasons -->
+
 <div class="page hidden" id="page-reasons">
   <h2 class="reasons-title">A few reasons why…</h2>
   <div class="reasons-grid" id="reasonsGrid">
@@ -378,17 +386,19 @@
 </div>
 
 <!-- PAGE 4: The Question -->
+
 <div class="page hidden" id="page-question">
   <div class="big-heart">❤️</div>
   <h1 class="question-text">Will you be<br/>my girlfriend?</h1>
   <p class="question-sub">No pressure… okay maybe a little. 🥺</p>
   <div class="btn-row">
     <button class="btn-yes" onclick="goTo('page-yes')">Yes! 🎉</button>
-    <button class="btn-no" id="noBtn" onmouseover="runAway(this)" ontouchstart="runAway(this)" onclick="runAway(this)">No</button>
+    <button class="btn-no" id="noBtn" onmouseover="runAway(this)" ontouchstart="handleNo(event)" onclick="handleNo(event)">No</button>
   </div>
 </div>
 
 <!-- PAGE 5: Promise -->
+
 <div class="page hidden" id="page-yes">
   <div class="confetti-wrap">🤝</div>
   <h1 class="yes-title">My Promise to You</h1>
@@ -440,17 +450,21 @@
 
   // ── Runaway No button ──
   let noClickCount = 0;
+  function handleNo(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const btn = document.getElementById('noBtn');
+    runAway(btn);
+  }
   function runAway(btn) {
     noClickCount++;
     const margin = 80;
     const vw = window.innerWidth - margin;
     const vh = window.innerHeight - margin;
-    let newX, newY;
-    // Always jump to the opposite side of the screen
-    const currentX = btn.offsetLeft || window.innerWidth / 2;
-    const currentY = btn.offsetTop || window.innerHeight / 2;
-    newX = currentX < vw / 2 ? vw * 0.6 + Math.random() * vw * 0.35 : Math.random() * vw * 0.3;
-    newY = currentY < vh / 2 ? vh * 0.6 + Math.random() * vh * 0.35 : Math.random() * vh * 0.3;
+    const currentX = parseFloat(btn.style.left) || window.innerWidth / 2;
+    const currentY = parseFloat(btn.style.top) || window.innerHeight / 2;
+    const newX = currentX < vw / 2 ? vw * 0.6 + Math.random() * vw * 0.35 : Math.random() * vw * 0.3;
+    const newY = currentY < vh / 2 ? vh * 0.6 + Math.random() * vh * 0.35 : Math.random() * vh * 0.3;
     btn.style.position = 'fixed';
     btn.style.left = newX + 'px';
     btn.style.top = newY + 'px';
@@ -479,5 +493,6 @@
     }
   }
 </script>
+
 </body>
 </html>
