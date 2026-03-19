@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A Question For You 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:    #e8405a;
+      --blush:   #fde8ed;
+      --cream:   #fff8f0;
+      --gold:    #c9972c;
+      --dark:    #1a0a10;
+      --petal:   #f5b8c4;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── Floating hearts background ── */
+    .hearts-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .heart-particle {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.4rem;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── Pages ── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .page.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .page.hidden { display: none; }
+
+    /* ── Envelope / cover page ── */
+    #page-cover {
+      background: radial-gradient(ellipse at 60% 40%, #fde8ed 0%, #fff8f0 70%);
+    }
+    .envelope-wrap {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .envelope {
+      width: 160px; height: 110px;
+      position: relative;
+      filter: drop-shadow(0 8px 24px rgba(232,64,90,0.25));
+      transition: transform 0.3s ease;
+    }
+    .envelope:hover { transform: scale(1.06) rotate(-2deg); }
+    .envelope svg { width: 100%; height: 100%; }
+
+    .cover-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: var(--rose);
+      font-style: italic;
+    }
+    .cover-hint {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-transform: uppercase;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    /* ── Letter page ── */
+    #page-letter {
+      background: linear-gradient(160deg, #fff8f0 0%, #fde8ed 100%);
+    }
+    .letter-card {
+      background: #fff;
+      border-radius: 2px;
+      max-width: 560px;
+      width: 100%;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 4px 40px rgba(232,64,90,0.12), 0 1px 4px rgba(0,0,0,0.06);
+      position: relative;
+      animation: cardIn 0.7s ease both;
+    }
+    @keyframes cardIn {
+      from { transform: translateY(40px) rotate(-1deg); opacity: 0; }
+      to   { transform: none; opacity: 1; }
+    }
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose));
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+
+    .letter-date {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.6rem;
+    }
+    .letter-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--rose);
+      margin-bottom: 1.4rem;
+      line-height: 1.2;
+    }
+    .letter-body {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #4a2030;
+      font-weight: 300;
+    }
+    .letter-body strong {
+      font-weight: 400;
+      color: var(--rose);
+    }
+    .letter-sig {
+      margin-top: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+    .next-btn {
+      margin-top: 2.4rem;
+      background: var(--rose);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2.4rem;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(232,64,90,0.35);
+    }
+    .next-btn:hover {
+      background: #c42d46;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(232,64,90,0.4);
+    }
+
+    /* ── Reasons page ── */
+    #page-reasons {
+      background: linear-gradient(135deg, #fff0f5 0%, #fff8e8 100%);
+    }
+    .reasons-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--rose);
+      margin-bottom: 2rem;
+    }
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      max-width: 680px;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    .reason-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: 0 2px 16px rgba(232,64,90,0.1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    .reason-card.pop {
+      animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes popIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    .reason-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 28px rgba(232,64,90,0.18);
+    }
+    .reason-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .reason-text { font-size: 0.9rem; color: #4a2030; line-height: 1.5; }
+
+    /* ── Question page ── */
+    #page-question {
+      background: radial-gradient(ellipse at 50% 60%, #fde8ed 0%, #fff8f0 65%);
+    }
+    .big-heart {
+      font-size: 5rem;
+      animation: heartbeat 1.2s ease-in-out infinite;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    @keyframes heartbeat {
+      0%,100%{ transform: scale(1); }
+      14%    { transform: scale(1.18); }
+      28%    { transform: scale(1); }
+      42%    { transform: scale(1.12); }
+      70%    { transform: scale(1); }
+    }
+    .question-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      color: var(--rose);
+      margin-bottom: 0.5rem;
+      line-height: 1.15;
+    }
+    .question-sub {
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 2.4rem;
+      font-style: italic;
+    }
+    .btn-row {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-yes {
+      background: var(--rose);
+      color: #fff;
+      border: none;
+      padding: 1rem 3rem;
+      border-radius: 50px;
+      font-size: 1.15rem;
+      font-family: 'Playfair Display', serif;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(232,64,90,0.4);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-yes:hover {
+      background: #c42d46;
+      transform: scale(1.07);
+      box-shadow: 0 8px 32px rgba(232,64,90,0.5);
+    }
+    .btn-no {
+      background: transparent;
+      color: #c0909a;
+      border: 2px solid #e8b8c4;
+      padding: 1rem 2.4rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    /* ── Yes page ── */
+    #page-yes {
+      background: radial-gradient(ellipse at 50% 40%, #fde8ed 0%, #fff8f0 70%);
+    }
+    .confetti-wrap { font-size: 3rem; margin-bottom: 0.8rem; animation: spin 1s ease both; }
+    @keyframes spin { from{transform:rotate(-20deg) scale(0.5);opacity:0} to{transform:none;opacity:1} }
+    .yes-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      color: var(--rose);
+      margin-bottom: 0.6rem;
+      line-height: 1.1;
+    }
+    .yes-sub {
+      font-size: 1.1rem;
+      color: #4a2030;
+      font-weight: 300;
+      max-width: 420px;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .sparkle-row { font-size: 2rem; letter-spacing: 0.4rem; animation: floatY 2s ease-in-out infinite; }
+    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  </style>
+</head>
+<body>
+
+<!-- Floating hearts -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- PAGE 1: Envelope -->
+<div class="page active" id="page-cover">
+  <div class="envelope-wrap" onclick="goTo('page-letter')">
+    <div class="envelope">
+      <svg viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="160" height="110" rx="6" fill="#fff" stroke="#f5b8c4" stroke-width="2"/>
+        <polygon points="0,0 80,62 160,0" fill="#fde8ed" stroke="#f5b8c4" stroke-width="1.5"/>
+        <polygon points="0,0 0,110 58,58" fill="#fce0e8" stroke="#f5b8c4" stroke-width="1"/>
+        <polygon points="160,0 160,110 102,58" fill="#fce0e8" stroke="#f5b8c4" stroke-width="1"/>
+        <polygon points="0,110 160,110 102,58 58,58" fill="#fff0f4" stroke="#f5b8c4" stroke-width="1"/>
+        <text x="80" y="75" text-anchor="middle" font-size="22" fill="#e8405a">💌</text>
+      </svg>
+    </div>
+    <p class="cover-text">I have something to ask you…</p>
+    <p class="cover-hint">tap to open</p>
+  </div>
+</div>
+
+<!-- PAGE 2: Letter -->
+<div class="page hidden" id="page-letter">
+  <div class="letter-card">
+    <p class="letter-date">A letter, just for you</p>
+    <h1 class="letter-heading">Gosh I am so nervous right now 😭</h1>
+    <p class="letter-body">
+      6 years ago today, you became an integral part of my life; a part of my life I can't live without. 
+      Years of unbridled joy knowing I have the best partner in the world. There were a lot of good times — 
+      a whole lotttttt — but in every good there was bad times too. Last year the bad times sent a dagger 
+      into both our hearts <strong>(just remembering that feeling was so terrible)</strong> and things went sideways 
+      between us and we hadn't fully recovered from that until this year.<br><br>
+      This year we had our bad times too but I told you that <strong>I'm not letting you go</strong> and I mean that 
+      with every fiber of my being. It's you <strong>Yaa Ayaw</strong> that I want and it's you I'm going to get. 
+      I picked today to do this because I feel this day is already special to us.<br><br>
+      Every moment I spend with you feels like the best chapter of my favourite movie — the kind I never 
+      want to stop watching. You make ordinary days feel like <strong>adventures</strong>, and quiet evenings feel like 
+      <strong>home</strong>.<br><br>
+      So I put together this little page, just for you, because you deserve something made with care — 
+      not just a text message… and also that I am a great coder. 😏
+    </p>
+    <p class="letter-sig">— Someone who's not letting you go</p>
+    <button class="next-btn" onclick="goTo('page-reasons')">Keep reading →</button>
+  </div>
+</div>
+
+<!-- PAGE 3: Reasons -->
+<div class="page hidden" id="page-reasons">
+  <h2 class="reasons-title">A few reasons why…</h2>
+  <div class="reasons-grid" id="reasonsGrid">
+    <div class="reason-card"><div class="reason-icon">🫵</div><div class="reason-text">YOUUU. Just… you. That's it. That's the whole reason.</div></div>
+    <div class="reason-card"><div class="reason-icon">👀</div><div class="reason-text">Your eyes. I could get lost in them and honestly I wouldn't even complain.</div></div>
+    <div class="reason-card"><div class="reason-icon">✨</div><div class="reason-text">Your eyes again. Yes, they deserve a second card. Don't argue with me.</div></div>
+    <div class="reason-card"><div class="reason-icon">🫀</div><div class="reason-text">How you make me feel — safe, happy, and like the luckiest person alive.</div></div>
+    <div class="reason-card"><div class="reason-icon">👁️</div><div class="reason-text">Your eyes. I know, I know. But have you SEEN your eyes though??</div></div>
+    <div class="reason-card"><div class="reason-icon">😤</div><div class="reason-text">Your bad attitude. Somehow even that has me down bad. It's a problem.</div></div>
+  </div>
+  <button class="next-btn" onclick="goTo('page-question')">One more thing… →</button>
+</div>
+
+<!-- PAGE 4: The Question -->
+<div class="page hidden" id="page-question">
+  <div class="big-heart">❤️</div>
+  <h1 class="question-text">Will you be<br/>my girlfriend?</h1>
+  <p class="question-sub">No pressure… okay maybe a little. 🥺</p>
+  <div class="btn-row">
+    <button class="btn-yes" onclick="goTo('page-yes')">Yes! 🎉</button>
+    <button class="btn-no" id="noBtn" onmouseover="runAway(this)" ontouchstart="runAway(this)">No</button>
+  </div>
+</div>
+
+<!-- PAGE 5: Yes! -->
+<div class="page hidden" id="page-yes">
+  <div class="confetti-wrap">🎊</div>
+  <h1 class="yes-title">She said YES! 🎉</h1>
+  <p class="yes-sub">
+    This is the beginning of something beautiful.<br/>
+    I promise to make every day worth smiling about. ❤️
+  </p>
+  <div class="sparkle-row">✨ 💕 ✨</div>
+</div>
+
+<script>
+  // ── Floating hearts ──
+  const hb = document.getElementById('heartsBg');
+  const emojis = ['❤️','🌹','💕','💗','💖','💝','🌸','✨'];
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('span');
+    el.className = 'heart-particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+    const dur = 8 + Math.random() * 12;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = -(Math.random() * dur) + 's';
+    hb.appendChild(el);
+  }
+
+  // ── Page navigation ──
+  function goTo(id) {
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+      p.classList.add('hidden');
+    });
+    const target = document.getElementById(id);
+    target.classList.remove('hidden');
+    requestAnimationFrame(() => requestAnimationFrame(() => target.classList.add('active')));
+
+    if (id === 'page-reasons') {
+      setTimeout(() => {
+        document.querySelectorAll('.reason-card').forEach((c, i) => {
+          setTimeout(() => c.classList.add('pop'), i * 120);
+        });
+      }, 300);
+    }
+
+    if (id === 'page-yes') launchConfetti();
+  }
+
+  // ── Runaway No button ──
+  function runAway(btn) {
+    const vw = window.innerWidth - 80;
+    const vh = window.innerHeight - 50;
+    btn.style.position = 'fixed';
+    btn.style.left = Math.random() * vw + 'px';
+    btn.style.top  = Math.random() * vh + 'px';
+    btn.style.transition = 'left 0.3s ease, top 0.3s ease';
+  }
+
+  // ── Confetti burst ──
+  function launchConfetti() {
+    const symbols = ['❤️','🌹','💕','🎊','🎉','✨','💖','🌸'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.cssText = `
+        position:fixed; font-size:${1+Math.random()*1.5}rem;
+        left:${Math.random()*100}vw; top:-40px;
+        animation: floatUp ${4+Math.random()*4}s linear forwards;
+        pointer-events:none; z-index:999;
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 8000);
+    }
+  }
+</script>
+</body>
+</html>
